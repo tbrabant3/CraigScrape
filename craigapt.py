@@ -2,10 +2,13 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import random
 
-ACCESS_TOKEN = 'ACCESS_TOKEN'
-VERIFY_TOKEN = 'VERIFY_TOKEN'
+with open("tokens.txt") as f:
+    ACCESS_TOKEN = f.readline()
+    VERIFY_TOKEN = f.readline()
+
 bot = Bot(ACCESS_TOKEN)
 app = Flask(__name__)
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -35,7 +38,6 @@ def verify_fb_token(token_sent):
     if token_sent == VERIFY_TOKEN:
         return request.args.get("hub.challenge")
     return "Invalid verification token"
-
 
 def send_message(recipient_id, response):
     bot.send_text_message(recipient_id, response)
